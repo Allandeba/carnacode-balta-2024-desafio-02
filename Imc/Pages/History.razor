@@ -2,6 +2,55 @@
 
 <PageTitle>History</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="container col-md-4">
+    <div class="text-center">
+        <img class="img-thumbnail mb-3" src="icon-no-bg.png" alt="Logo" style="height: 95px; width: 95px;">
+        <h1 class="mb-3">Histórico</h1>
+    </div>
 
-History.
+    <InputText class="form-control mb-3" @bind-Value="Model.Pesquisa" placeholder="Pesquisar..." />
+
+    <div class="list-group list-group-flush">
+        <div class="list-group-item border-0">
+            <div class="d-flex">
+                <img class="img-thumbnail me-3" alt="Histórico" src="icon-no-bg.png" style="height: 64px; width: 64px;">
+                
+                <div class="row"> 
+                    <div class="col">
+                        <div class="d-flex flex-grow-1">
+                            <h6 class="text-start fw-bold me-2">Peso ideal</h6>
+                            <i class="fas fa-check-square me-1" style="color: #18e239;"></i>
+                            <span class="text-muted ms-auto">8m atrás</span>
+                        </div>
+                    </div>
+
+                    <h6>Parabéns, você está no seu peso ideal, continue mantendo este estilo!</h6>
+                    <hr />
+                </div>
+            </div>
+        </div>
+
+        <div class="list-group-item border-0">
+            <div class="d-flex">
+                <img class="img-thumbnail me-3" alt="Histórico" src="icon-no-bg.png" style="height: 64px; width: 64px;">
+                
+                <div class="row"> 
+                    <div class="col">
+                        <div class="d-flex flex-grow-1">
+                            <h6 class="text-start fw-bold me-2">Sobrepeso</h6>
+                            <i class="fas fa-minus-circle history-icon" style="color: #eb0a0a"></i>
+                            <span class="text-muted ms-auto">12/10/2023</span>
+                        </div>
+                    </div>
+
+                    <h6>Estamos quase lá! Faça alguns ajustes para ficar no peso ideal!</h6>
+                    <hr />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private HistoryModel Model { get; set; } = new();
+}
