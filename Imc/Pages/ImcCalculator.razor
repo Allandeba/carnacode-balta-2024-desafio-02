@@ -1,0 +1,20 @@
+﻿@page "/imc"
+
+<PageTitle>Cálculo de IMC</PageTitle>
+
+<Imc.Pages.Components.ImcCalculator>
+    <button type="button" class="btn btn-secondary" @onclick="EntendaCalculo">Entenda o cálculo</button>
+</Imc.Pages.Components.ImcCalculator>
+
+@code {    
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; }
+
+    private async Task EntendaCalculo() {
+        await JSRuntime.InvokeVoidAsync("alert", "Warning!"); // Alert
+
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure?"); // Confirm
+        string prompted = await JSRuntime.InvokeAsync<string>("prompt", "Take some input:"); // Prompt
+        return;
+    }
+}
