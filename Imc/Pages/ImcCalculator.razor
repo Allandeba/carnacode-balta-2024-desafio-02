@@ -1,20 +1,41 @@
 ﻿@page "/imc"
+@inject NavigationManager NavigationManager
 
 <PageTitle>Cálculo de IMC</PageTitle>
 
-<Imc.Pages.Components.ImcCalculator>
+<Imc.Pages.Components.ImcCalculator Model="Imc" Calcular="CalcularImc">
     <button type="button" class="btn btn-secondary" @onclick="EntendaCalculo">Entenda o cálculo</button>
 </Imc.Pages.Components.ImcCalculator>
 
+<ModalDialog Title="Titulo" Body="Corpo" ConfirmationButton="SalvarHistoricoAsync" ShowModal="ShowModal">
+    <button type="button" class="btn btn-secondary" @onclick="VerHistorico">Ver meu histórico</button>
+</ModalDialog>
+
 @code {    
     [Inject]
-    private IJSRuntime JSRuntime { get; set; }
+    private IJSRuntime JSRuntime { get; set; } = null!;
+    private ImcModel Imc { get; set; } = new();
+    private bool ShowModal = false;
 
     private async Task EntendaCalculo() {
-        await JSRuntime.InvokeVoidAsync("alert", "Warning!"); // Alert
+        await JSRuntime.InvokeAsync<object>("open", "https://www.unimedcampinas.com.br/blog/cuidado-continuo/entenda-o-que-e-calculo-imc-e-para-que-serve", "_blank");
+        return;
+    }
 
-        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure?"); // Confirm
-        string prompted = await JSRuntime.InvokeAsync<string>("prompt", "Take some input:"); // Prompt
+    private void VerHistorico() {
+        NavigationManager.NavigateTo("history");
+        return;
+    }
+
+    private void CalcularImc() {
+        var result = Imc.Calcular();
+        ShowModal = true;
+        return;
+    }
+
+    private async Task SalvarHistoricoAsync() {
+        await Task.Delay(200);
+        VerHistorico();
         return;
     }
 }
