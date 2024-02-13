@@ -3,11 +3,12 @@ using Imc.Models.Enums;
 
 namespace Imc.Models
 {
-    public class ResultImc 
+    public class ResultImc
     {
         public string Title { get; set; } = string.Empty;
         public string Body { get; set; } = string.Empty;
         public EStatusImc Status { get; set; } = EStatusImc.Ruim;
+        public string Icon => (Status == EStatusImc.Ruim) ? "⛔" : "✅";
     }
 
     public class ImcModel
@@ -31,6 +32,23 @@ namespace Imc.Models
         [Required(ErrorMessage = RequiredMessage)]
         public EGenero Sexo { get; set; } = EGenero.NaoInformado;
 
+        private DateTime Adicionado = DateTime.UtcNow;
+        public string Inserido {
+            get {
+                TimeSpan diferenca = DateTime.UtcNow - Adicionado;
+                if (diferenca.Minutes < 1)
+                    return $"{diferenca.Seconds}s atrás";
+
+                if (diferenca.TotalHours < 1)
+                    return $"{diferenca.Minutes}m atrás";
+
+                if (diferenca.TotalHours >= 1)
+                    return $"{diferenca.Hours}h atrás";
+
+                return diferenca.ToString("dd/MM/yyyy");
+            }
+        }
+
         public ResultImc Calcular()
         {
             if (!(Altura.HasValue && Peso.HasValue))
@@ -47,32 +65,23 @@ namespace Imc.Models
             const string Parabens = "Você está {0}, continue mantendo este estilo!";
 
             var ResultImc = new ResultImc();
-            if (imc < 18.5)
-            {
+            if (imc < 18.5) {
                 ResultImc.Title = EImcStatus.Magreza.ToString();
                 ResultImc.Body = string.Format(Cuidado, ResultImc.Title);
                 ResultImc.Status = EStatusImc.Ruim;
-            }
-            else if (imc >= 18.5 && imc < 25)
-            {
+            } else if (imc >= 18.5 && imc < 25) {
                 ResultImc.Title = EImcStatus.Normal.ToString();
                 ResultImc.Body = string.Format(Parabens, ResultImc.Title);
                 ResultImc.Status = EStatusImc.Bom;
-            }
-            else if (imc >= 25 && imc < 30)
-            {
+            } else if (imc >= 25 && imc < 30) {
                 ResultImc.Title = EImcStatus.Sobrepeso.ToString();
                 ResultImc.Body = string.Format(Cuidado, ResultImc.Title);
                 ResultImc.Status = EStatusImc.Ruim;
-            }
-            else if (imc >= 30 && imc < 40)
-            {
+            } else if (imc >= 30 && imc < 40) {
                 ResultImc.Title = EImcStatus.Obesidade.ToString();
                 ResultImc.Body = string.Format(Cuidado, ResultImc.Title);
                 ResultImc.Status = EStatusImc.Ruim;
-            }
-            else
-            {
+            } else {
                 // Todo: Fazer o Display name Extension para enumeradores
                 ResultImc.Title = "Obesidade Grave";
                 ResultImc.Body = string.Format(Cuidado, ResultImc.Title);

@@ -1,5 +1,6 @@
 ﻿@page "/imc"
 @inject NavigationManager NavigationManager
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
 <PageTitle>Cálculo de IMC</PageTitle>
 
@@ -34,11 +35,7 @@
     private void CalcularImc()
     {
         var result = Imc.Calcular();
-        var emoji = "⛔";
-        if (result.Status == EStatusImc.Bom)
-            emoji = "✅";
-
-        Title = emoji + ' ' + result.Title;
+        Title = result.Icon + ' ' + result.Title;
         Body = result.Body;
         StateHasChanged();
         ShowModal = true;
@@ -47,7 +44,9 @@
 
     private async Task SalvarHistoricoAsync()
     {
-        await LocalStorage.SetItemAsync("Historico", "");
+        var imcList = await LocalStorage.GetItemAsync<List<ImcModel>>("ImcList") ?? new List<ImcModel>();
+        imcList.Add(Imc);
+        await LocalStorage.SetItemAsync("ImcList", imcList);
         VerHistorico();
         return;
     }
